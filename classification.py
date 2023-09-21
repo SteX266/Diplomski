@@ -10,7 +10,7 @@ from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
 
-spectrogram_dir = './Data/spectrograms_3sec_cropped/'
+spectrogram_dir = './Data/spectrograms_30sec/'
 genres = os.listdir(spectrogram_dir)
 print(genres)
 num_classes = len(genres)
@@ -61,6 +61,8 @@ model = keras.Sequential([
     layers.Conv2D(128, (3, 3), activation='relu'),
     layers.MaxPooling2D((2, 2)),
     layers.Conv2D(256, (3, 3), activation='relu'),
+    layers.Conv2D(256, (3, 3), activation='relu'),
+
     layers.MaxPooling2D((2, 2)),
     layers.Flatten(),
     layers.Dense(256, activation='relu'),
@@ -93,7 +95,7 @@ lr_scheduler = keras.callbacks.ReduceLROnPlateau(
 
 model.fit(X_train, y_train_encoded, epochs=80, batch_size=32, validation_split=0.2,
      callbacks=[early_stopping, lr_scheduler])
-model.save("najbolji_model_dodat256.h5")
+model.save("najbolji_model_dodat256_cropped.h5")
 
 test_loss, test_acc = model.evaluate(X_test, y_test_encoded)
 print(f'Test accuracy: {test_acc}')
